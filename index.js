@@ -1,45 +1,32 @@
-// Requires
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-
 require('dotenv').config();
+
+const express = require('express');
 const cors = require('cors');
 
-//Importar
 const { dbConnection } = require('./database/config');
 
-// Inicializar variable
+// Crear el servidor de express
 const app = express();
 
-//Configurar CORS
+// Configurar CORS
 app.use( cors() );
 
-//Lectura y parseo del body
-app.use(express.json());
+// Lectura y parseo del body
+app.use( express.json() );
 
-//Base de datos
+// Base de datos
 dbConnection();
 
-//Body Parser
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.use(express.json());
-
-//Importar rutas
-var appRoutes = require('./routes/app');
-var usuarioRoutes = require('./routes/usuario');
 
 // Rutas
-app.use('/usuario', usuarioRoutes);
-app.use('/', appRoutes);
-app.use('/api/login', require('./routes/auth'));
+app.use( '/api/usuarios', require('./routes/usuarios'));
+app.use ('/api/hospitales', require('./routes/hospitales'));
+app.use ('/api/medicos', require('./routes/medicos'));
+app.use ('/api/login', require('./routes/auth'));
+app.use ('/api/todo', require('./routes/busquedas'));
+app.use ('/api/uploads', require('./routes/uploads'));
 
-// Escuchar peticiones
-app.listen(process.env.PORT , ()=> {
-
-    console.log('Corriendo en el puerto 3000: \x1b[32m%s\x1b[0m', 'online');
-
+app.listen( process.env.PORT, () => {
+    console.log('Servidor corriendo en puerto ' + process.env.PORT );
 });
+
